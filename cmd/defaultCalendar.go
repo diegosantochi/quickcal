@@ -14,6 +14,8 @@ You should have received a copy of the GNU General Public License along with Qui
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -26,60 +28,25 @@ If no arguments are given, this command will output the current default calendar
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		/*if len(args) == 0 {
+		for _, cfgServer := range cfg.Servers {
 
-			if defaultCalendar == "" {
-				fmt.Println("No default calendar set")
-			} else {
-				fmt.Printf("Default calendar: %s\n", defaultCalendar)
-			}
-
-			return
-		}
-
-		principal, err := caldavClient.FindCurrentUserPrincipal()
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		homeset, err := caldavClient.FindCalendarHomeSet(principal)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		calendars, err := caldavClient.FindCalendars(homeset)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		for _, calendar := range calendars {
-			if calendar.Path == args[0] {
-
-				viper.Set("calendar.default", calendar.Path)
-
-				err = viper.WriteConfig()
-				if err != nil {
-					fmt.Println(err)
+			for _, cgfCalendar := range cfgServer.Calendars {
+				if cgfCalendar.Default {
+					fmt.Println()
+					fmt.Println("Server:", cfgServer.Name)
+					fmt.Println("Calendar name:", cgfCalendar.Name)
+					fmt.Println("Calendar path:", cgfCalendar.Path)
+					fmt.Println("Calendar color:", cgfCalendar.Color)
+					fmt.Println()
+					return
 				}
-
-				return
 			}
 		}
 
-		fmt.Println("No valid calendar found with that path")*/
+		fmt.Println("No default calendar found")
 	},
 }
 
 func init() {
 	calendarCmd.AddCommand(defaultCalendarCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// defaultCalendarCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// defaultCalendarCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

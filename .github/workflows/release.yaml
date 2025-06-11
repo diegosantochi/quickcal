@@ -47,17 +47,21 @@ jobs:
           go-version: 1.24
           check-latest: true
 
-      - name: Build
+      - name: Name binary
+        id: bin-name
         run: |-
           if ${{ matrix.goos }} == 'windows'; then
             extension=".exe";
           else
             extension="";
           fi
+          echo "bin-path=bin/${{ matrix.goos }}/${{ matrix.goarch }}" >> $GITHUB_OUTPUT
+          echo "bin-name=qc${extension}" >> $GITHUB_OUTPUT
 
-          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/${{ matrix.goos }}/${{ matrix.goarch }}/qc${extension} .
+      - name: Build
+        run: GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o ${{ steps.bin-name.outputs.bin-path }}/${{ steps.bin-name.outputs.bin-name }} .
 
       - name: Upload binary
-        run: gh release upload ${{ needs.release-setup.outputs.version }} bin/qc
+        run: gh release upload ${{ needs.release-setup.outputs.version }} ${{ steps.bin-name.outputs.bin-path }}/${{ steps.bin-name.outputs.bin-name }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

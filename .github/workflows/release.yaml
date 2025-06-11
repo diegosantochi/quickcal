@@ -11,12 +11,14 @@ jobs:
     name: Release setup
     outputs:
       version: ${{ steps.meta.outputs.version }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Latest tag
         id: meta
-        run: echo "::set-output name=version::$(git describe --tags)"
+        run: echo "version=$(git describe --tags)" >> $GITHUB_OUTPUT
 
       - name: Release creation
         run: gh release create ${{ steps.meta.outputs.version }}
@@ -27,6 +29,8 @@ jobs:
     name: Release
     needs: release-setup
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       matrix:
         goos: [linux, darwin, windows]

@@ -48,7 +48,14 @@ jobs:
           check-latest: true
 
       - name: Build
-        run: GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/qc .
+        run: |-
+          if ${{ matrix.goos }} == 'windows'; then
+            extension=".exe";
+          else
+            extension="";
+          fi
+
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/${{ matrix.goos }}/${{ matrix.goarch }}/qc${extension} .
 
       - name: Upload binary
         run: gh release upload ${{ needs.release-setup.outputs.version }} bin/qc

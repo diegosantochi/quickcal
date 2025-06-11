@@ -6,14 +6,15 @@ A CLI CalDAV client.
 
 ### Installation
 
-Clone this repository and run:
+Binary files are available as releases. Download the proper one and place it in your `$PATH`
+
+Alternatively, it can be compiled by cloning this repo and running:
+
 ```shell
 make install
 ```
 
 This will copy the binary at `./bin/qc` to `~/.local/bin/qc`. Make sure the directory in your `$PATH` (or copy the binary to a directory in your `$PATH`)
-
-Binaries will be provided soon
 
 ### Configuration
 

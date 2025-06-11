@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release-setup:
+    runs-on: ubuntu-latest
+    name: Release setup
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Latest tag
+        id: meta
+        run: echo "::set-output name=version::$(git describe --tags)"
+
+      - name: Release creation
+        run: gh release create ${{ meta.outputs.version }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    name: Release
+    needs: release-setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, darwin, windows]
+        goarch: [amd64, arm64]
+        exclude:
+          - os: windows-latest
+            arch: arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24
+          check-latest: true
+
+      - name: Build
+        run: GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/qc .
+
+      - name: Upload binary
+        run: gh release upload $${{ needs.release-setup.outputs.version }} bin/qc
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

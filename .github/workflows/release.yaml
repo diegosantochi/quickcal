@@ -36,7 +36,7 @@ jobs:
         goos: [linux, darwin, windows]
         goarch: [amd64, arm64]
         exclude:
-          - goos: windows-latest
+          - goos: windows
             goarch: arm64
     steps:
       - uses: actions/checkout@v4
@@ -50,10 +50,9 @@ jobs:
       - name: Name binary
         id: bin-name
         run: |-
-          if '${{ matrix.goos }}' == 'windows'; then
+          extension=""
+          if [ '${{ matrix.goos }}' == 'windows' ]; then
             extension=".exe";
-          else
-            extension="";
           fi
           echo "bin-name=${{ matrix.goos }}-${{ matrix.goarch }}-qc${extension}" >> $GITHUB_OUTPUT
 

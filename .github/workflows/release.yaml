@@ -32,8 +32,8 @@ jobs:
         goos: [linux, darwin, windows]
         goarch: [amd64, arm64]
         exclude:
-          - os: windows-latest
-            arch: arm64
+          - goos: windows-latest
+            goarch: arm64
     steps:
       - uses: actions/checkout@v4
 

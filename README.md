@@ -8,10 +8,10 @@ A CLI CalDAV client.
 
 Clone this repository and run:
 ```shell
-make build
+make install
 ```
 
-Copy the binary at `./bin/qc` to a directory in your `$PATH`
+This will copy the binary at `./bin/qc` to `~/.local/bin/qc`. Make sure the directory in your `$PATH` (or copy the binary to a directory in your `$PATH`)
 
 Binaries will be provided soon
 
@@ -53,7 +53,7 @@ Parameters `--from` and `--to` can be used to specify a different date range
 5. to add a new event, run:
 ```
 qc event add
-``` 
+```
 
 To get the complete list of commands, run:
 ```shell
@@ -72,5 +72,5 @@ qc calendar default
 
 ### License
 
-This project is licensed under the GNU General Public License v3.0 (GPLv3).  
+This project is licensed under the GNU General Public License v3.0 (GPLv3).
 See the [LICENSE](./LICENSE) file for details.

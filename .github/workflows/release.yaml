@@ -19,7 +19,7 @@ jobs:
         run: echo "::set-output name=version::$(git describe --tags)"
 
       - name: Release creation
-        run: gh release create ${{ meta.outputs.version }}
+        run: gh release create ${{ steps.meta.outputs.version }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
